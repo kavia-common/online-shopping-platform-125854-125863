@@ -75,11 +75,11 @@ export function AuthProvider({ children }) {
    */
   async function signUp({ email, password }) {
     if (!supabase) throw new Error('Supabase is not configured. Set REACT_APP_SUPABASE_URL and REACT_APP_SUPABASE_KEY.');
-    const siteUrl = process.env.REACT_APP_SITE_URL || window.location.origin;
+    const { getURL } = await import('../utils/getURL.js');
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: `${siteUrl}/login` },
+      options: { emailRedirectTo: `${getURL()}auth/callback` },
     });
     if (error) throw error;
     return data;
